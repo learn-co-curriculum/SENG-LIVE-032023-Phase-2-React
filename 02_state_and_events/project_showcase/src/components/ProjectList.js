@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 
 import ProjectCard from "./ProjectCard";
 import projects from "../projects";
 
 function ProjectList() {
 
-  const renderedProjects = projects.map(project => {
+  const [ searchQuery, setSearchQuery ] = useState( '' )
+
+  const filterByInput = ( event ) => setSearchQuery( event.target.value )
+
+  const filteredProjects = projects.filter( project => project.name.toLowerCase().includes( searchQuery.toLowerCase() ) )
+
+  console.log( filteredProjects )
+
+  const renderedProjects = filteredProjects.map(project => {
     return <ProjectCard key={project.id} project={project} />
   })
 
@@ -21,7 +29,12 @@ function ProjectList() {
         <button>Phase 2</button>
         <button>Phase 1</button>
       </div>
-      <input type="text" placeholder="Search..."/>
+      
+      <input 
+        type="text" 
+        onChange={ filterByInput } 
+        placeholder="Search..."
+      />
 
       <ul className="cards">{renderedProjects}</ul>
     </section>

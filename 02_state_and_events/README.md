@@ -17,7 +17,7 @@
 
 - Attach a 'click' event to the button that invokes the callback function `handleClick`
 
-#### 2. Add a click event to the clap button inside the `ProjectListItem` component:
+#### 2. Add a click event to the clap button inside the `ProjectCard` component:
 
 - Initialize state `clapCounts` set to 0
 
