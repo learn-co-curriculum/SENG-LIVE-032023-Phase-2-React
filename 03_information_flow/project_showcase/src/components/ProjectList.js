@@ -1,42 +1,18 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import ProjectCard from "./ProjectCard";
 
-function ProjectList() {
-  const [projects, setProjects] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("")
-
-  const handleClick = () => {
-    loadProjects();
-  };
+function ProjectList({ projects, changeSearchQuery, incrementClap }) {
   
-  const loadProjects = () => {
-    fetch("http://localhost:4000/projects")
-      .then((res) => res.json())
-      .then((projects) => setProjects(projects));
-  }
-
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value)
-  }
-
-  const searchResults = projects.filter(project => {
-    return project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      project.about.toLowerCase().includes(searchQuery.toLowerCase());
-  })
-
-  const renderedProjects = searchResults.map(project => {
-    return (
-      <ProjectCard
-        key={project.id}
-        project={project}
-      />
-    )
-  })
-  
+  const renderedProjects = projects.map(project =>
+    <ProjectCard
+      key={project.id}
+      project = { project }
+      incrementClap= { incrementClap }
+    />
+  )
 
   return (
     <section>
-      <button onClick={handleClick}>Load Projects</button>
       <h2>Projects</h2>
 
       <div className="filter">
@@ -50,10 +26,10 @@ function ProjectList() {
       <input
         type="text"
         placeholder="Search..."
-        onChange={handleSearch}
+        onChange={ changeSearchQuery }
       />
 
-      <ul className="cards">{renderedProjects}</ul>
+      <ul className="cards">{ renderedProjects }</ul>
     </section>
   );
 };

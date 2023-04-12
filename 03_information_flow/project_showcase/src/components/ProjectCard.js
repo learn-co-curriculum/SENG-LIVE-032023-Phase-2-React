@@ -1,37 +1,35 @@
-import { useState } from "react";
+// import { useState } from "react";
 
-function ProjectCard({
-  project
-}) {
+function ProjectCard({ project, incrementClap }) {
+  
   const {
     image,
     name,
     about,
     link,
-    phase
+    phase,
+    clapCount
   } = project;
-
-  const [clapCount, setClapCount] = useState(0);
-
-  const handleClap = () => setClapCount(clapCount + 1);
 
   return (
     <li className="card">
       <figure className="image">
         <img src={image} alt={name} />
-        <button className="claps" onClick={handleClap}>
-          👏{clapCount}
+        <button className="claps" onClick={ () => incrementClap( project ) }>
+          👏{ clapCount }
         </button>
       </figure>
 
       <section className="details">
         <h4>{name}</h4>
         <p>{about}</p>
-        {link ? (
-          <p>
-            <a href={link}>Link</a>
-          </p>
-        ) : null}
+        {
+          link ? (
+            <p>
+              <a href={link}>Link</a>
+            </p>
+          ) : null
+        }
       </section>
 
       <footer className="extra">
