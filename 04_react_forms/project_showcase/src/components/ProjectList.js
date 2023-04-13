@@ -1,28 +1,25 @@
 import { useState } from 'react';
 import ProjectCard from "./ProjectCard";
 
-function ProjectList({ projects, onLoadProjects }) {
+function ProjectList({ projects, fetchProjects, incrementClaps }) {
 
-  const [searchQuery, setSearchQuery] = useState("")
+  const [ searchQuery, setSearchQuery ] = useState("")
 
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value)
-  }
+  const changeSearch = ( e ) => setSearchQuery( e.target.value )
 
-  const searchResults = projects.filter(project => {
-    return project.name.toLowerCase().includes(searchQuery.toLowerCase())
-  })
+  const searchResults = projects.filter( project => project.name.toLowerCase().includes( searchQuery.toLowerCase() ) )
 
-  const projectCards = searchResults.map(project => (
+  const projectCards = searchResults.map( project => (
     <ProjectCard
-      key={project.id}
-      project={project}
+      key = { project.id }
+      project = { project }
+      incrementClaps = { incrementClaps } 
     />
   ))
 
   return (
     <section>
-      <button onClick={onLoadProjects}>Load Projects</button>
+      <button onClick = { fetchProjects }>Load Projects</button>
       <h2>Projects</h2>
 
       <div className="filter">
@@ -36,10 +33,10 @@ function ProjectList({ projects, onLoadProjects }) {
       <input
         type="text"
         placeholder="Search..."
-        onChange={handleSearch}
+        onChange = { changeSearch }
       />
 
-      <ul className="cards">{projectCards}</ul>
+      <ul className="cards">{ projectCards }</ul>
     </section>
   );
 };

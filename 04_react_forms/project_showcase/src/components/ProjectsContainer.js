@@ -3,21 +3,43 @@ import { useState } from 'react';
 import ProjectForm from "./ProjectForm";
 import ProjectList from "./ProjectList";
 
-function ProjectsContainer() {
-  const [projects, setProjects] = useState([]);
+const baseUrl = 'http://localhost:4000/'
+const projectsUrl = baseUrl + 'projects/'
 
-  const onLoadProjects = () => {
-    fetch("http://localhost:4000/projects")
-      .then((res) => res.json())
-      .then((projectsData) => setProjects(projectsData));
+function ProjectsContainer() {
+
+  const [ projects, setProjects ] = useState( [] );
+
+  const fetchProjects = () => {
+    fetch( projectsUrl )
+      .then( res  => res.json() )
+      .then( projectsData  => {
+        const addClapsToProjects = projectsData.map( project => {
+          return {...project, clapCount: 0 }
+        })
+        setProjects( addClapsToProjects )
+      });
   }
+
+  const incrementClaps = id => {
+    const updateClapCountsForProjects = projects.map( project => 
+      project.id === id ? 
+      {...project, clapCount: project.clapCount + 1 } 
+      : project 
+    )
+    setProjects( updateClapCountsForProjects )
+  }
+
+  const addNewProject = newProject => setProjects( [...projects, newProject ] )
 
   return (
     <>
-      <ProjectForm />
+      <ProjectForm addNewProject = { addNewProject } />
+
       <ProjectList
-        onLoadProjects={onLoadProjects}
-        projects={projects}
+        fetchProjects = { fetchProjects }
+        projects = { projects }
+        incrementClaps = { incrementClaps }
       />
     </>
   )
