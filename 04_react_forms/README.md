@@ -23,7 +23,7 @@
 
 - When the form is submitted:
 
-  - Update the `projects` state located in the parent component, `App` using inverse data flow
+  - Update the `projects` state located in the parent component, `ProjectContainer` using inverse data flow
 
     - Use the spread operator to return a new array with the new project included
 
