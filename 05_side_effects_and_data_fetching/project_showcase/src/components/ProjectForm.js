@@ -7,7 +7,10 @@ const initialFormState = {
   link: "",
   image: ""
 }
-function ProjectForm({ onAddProject }) {
+
+function ProjectForm({ addNewProject }) {
+
+  // Another way to write out using state in a form! 🤓
   const [formData, setFormData] = useState(initialFormState)
   const { name, about, phase, link, image } = formData;
 
@@ -22,15 +25,18 @@ function ProjectForm({ onAddProject }) {
     })
   }
 
-  const handleSubmit = (e) => {
+  const submitNewProjectForm = (e) => {
+
     e.preventDefault();
-    onAddProject(formData);
+
+    addNewProject(formData);
+
     setFormData(initialFormState);
   }
 
   return (
     <section>
-      <form className="form" autoComplete="off" onSubmit={handleSubmit}>
+      <form className="form" autoComplete="off" onSubmit={ submitNewProjectForm }>
         <h3>Add New Project</h3>
 
         <label htmlFor="name">Name</label>
