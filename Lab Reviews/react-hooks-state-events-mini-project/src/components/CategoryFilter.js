@@ -2,6 +2,7 @@ import React from "react";
 
 function CategoryFilter( props ) {
 
+
   const renderCategories = props.categories.map( category => 
     <button 
       key={category} 

@@ -1,9 +1,6 @@
 import React from "react";
 
-function Header({ isDarkMode, onToggleDarkMode }) {
-  const handleToggleDarkModeClick = (e) => {
-    onToggleDarkMode();
-  }
+function Header({ isDarkMode, toggleDarkMode }) {
 
   return (
     <header>
@@ -11,7 +8,7 @@ function Header({ isDarkMode, onToggleDarkMode }) {
         <span className="logo">{"//"}</span>
         Project Showcase
       </h1>
-      <button onClick={handleToggleDarkModeClick}>{isDarkMode ? "Light Mode" : "Dark Mode"}</button>
+      <button onClick = { toggleDarkMode }>{ isDarkMode ? "Light Mode" : "Dark Mode" }</button>
     </header>
   );
 };
