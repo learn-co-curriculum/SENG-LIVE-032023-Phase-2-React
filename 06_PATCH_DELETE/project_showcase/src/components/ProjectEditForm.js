@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function ProjectEditForm({ projectToEdit, onUpdateProject }) {
+function ProjectEditForm({ projectToEdit, onUpdateProject, updateProjects }) {
   
 
   const [formData, setFormData] = useState(projectToEdit);
@@ -23,6 +23,7 @@ function ProjectEditForm({ projectToEdit, onUpdateProject }) {
   function handleSubmit(e) {
     e.preventDefault();
     // Add code here
+    updateProjects( formData )
     onUpdateProject();
   }
 
