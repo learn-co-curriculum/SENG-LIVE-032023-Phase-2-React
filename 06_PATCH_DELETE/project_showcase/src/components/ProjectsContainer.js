@@ -4,23 +4,25 @@ import ProjectForm from "./ProjectForm";
 import ProjectEditForm from "./ProjectEditForm";
 import ProjectList from "./ProjectList";
 
+const baseUrl = "http://localhost:4000/"
+const projectsUrl = baseUrl + "projects/"
+
 function ProjectsContainer() {
-  const [projects, setProjects] = useState([]);
+  let [projects, setProjects] = useState([]);
   const [projectToEdit, setProjectToEdit] = useState(null);
   const [selectedPhase, setSelectedPhase] = useState("");
   const [searchQuery, setSearchQuery] = useState("")
 
   
   useEffect(() => {
-    let url = "http://localhost:4000/projects";
     if (selectedPhase && searchQuery) {
-      url += `?phase=${selectedPhase}&q=${searchQuery}`
+      projectsUrl += `?phase=${selectedPhase}&q=${searchQuery}`
     } else if (selectedPhase) {
-      url += `?phase=${selectedPhase}`
+      projectsUrl += `?phase=${selectedPhase}`
     } else if (searchQuery) {
-      url += `?q=${searchQuery}`
+      projectsUrl += `?q=${searchQuery}`
     }
-    fetch(url)
+    fetch(projectsUrl)
       .then((res) => res.json())
       .then((projectsData) => setProjects(projectsData));
   }, [selectedPhase, searchQuery])
@@ -37,12 +39,48 @@ function ProjectsContainer() {
     setProjectToEdit(projectToEdit);
   };
 
+  const updateProjects = updatedProject => {
+
+    const patchRequest = {
+      method: 'PATCH',
+      headers: {
+        'content-type': 'application/json',
+        'accepts': 'application/json'
+      },
+      body: JSON.stringify( updatedProject )
+    }
+
+    fetch( projectsUrl + updatedProject.id, patchRequest )
+    .then( r => r.json() )
+    .then( updatedProjectData => {
+      const updatedProjects = projects.map( project =>
+        project.id === updatedProjectData.id ? updatedProjectData : project )
+
+      setProjects( updatedProjects )
+    })
+  }
+
+  const deleteProject = deletedProject => {
+
+    const deleteRequest = {
+      method: 'DELETE',
+    }
+
+    fetch( projectsUrl + deletedProject.id, deleteRequest )
+    .then( () => {
+      const deleteProjects = projects.filter( project => project.id !== deletedProject.id )
+
+      setProjects( deleteProjects )
+    })
+  }
+
   const renderForm = () => {
     if (projectToEdit) {
       return (
         <ProjectEditForm
           projectToEdit={projectToEdit}
           onUpdateProject={onUpdateProject}
+          updateProjects={updateProjects}
         />
       );
     } else {
@@ -59,6 +97,8 @@ function ProjectsContainer() {
         onEditProject={onEditProject}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        deleteProject={deleteProject}
+        updateProjects={updateProjects}
       />
     </>
   )

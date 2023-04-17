@@ -1,25 +1,28 @@
 import { useState } from "react";
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
 
-function ProjectCard({ project, onEditProject }) {
-  const { id, image, about, name, link, phase } = project;
-
-  const [clapCount, setClapCount] = useState(0);
-
-  const handleClap = () => setClapCount(clapCount => clapCount + 1);
+function ProjectCard({ project, onEditProject, deleteProject, updateProjects }) {
+  const { id, image, about, name, link, phase, claps } = project;
 
   const handleEditClick = () => {
     onEditProject(project);
   };
 
-  const handleDeleteClick = () => {};
+  const handleDeleteClick = () => {
+    deleteProject( project )
+  };
+
+  const increaseClaps = () => {
+    const updateProjectClaps = {...project, claps: project.claps + 1 }
+    updateProjects( updateProjectClaps )
+  }
 
   return (
     <li className="card">
       <figure className="image">
         <img src={image} alt={name} />
-        <button onClick={handleClap} className="claps">
-          👏{clapCount}
+        <button onClick={ increaseClaps } className="claps">
+          👏{claps}
         </button>
       </figure>
 

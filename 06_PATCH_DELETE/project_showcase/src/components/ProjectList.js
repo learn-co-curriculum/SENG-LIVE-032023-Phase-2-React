@@ -5,7 +5,9 @@ function ProjectList({
   projects,
   onEditProject,
   setSelectedPhase,
-  setSearchQuery
+  setSearchQuery,
+  deleteProject,
+  updateProjects
 }) {
   const [searchInputText, setSearchInputText] = useState("");
 
@@ -15,6 +17,8 @@ function ProjectList({
         key={project.id}
         project={project}
         onEditProject={onEditProject}
+        deleteProject={deleteProject}
+        updateProjects={updateProjects}
       />
     );
   });
