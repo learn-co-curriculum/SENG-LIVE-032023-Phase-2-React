@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Home from "./components/Home";
 import About from "./components/About";
 import ProjectsContainer from "./components/ProjectsContainer";
+import { Switch, Route } from "react-router-dom/cjs/react-router-dom";
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -15,9 +16,22 @@ function App() {
   return (
     <div className={isDarkMode ? "App" : "App light"}>
       <Header isDarkMode={isDarkMode} onToggleDarkMode={onToggleDarkMode} />
-      <Home />
-      <About />
-      <ProjectsContainer />
+      
+      <Switch >
+
+        <Route exact path='/' >
+          <Home />
+        </Route >
+
+        <Route exact path='/about' >
+          <About />
+        </Route>
+
+        <Route path='/projects' >
+          <ProjectsContainer />
+        </Route>
+
+      </Switch>
     </div>
   );
 };

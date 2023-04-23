@@ -3,12 +3,16 @@ import ProjectList from './ProjectList';
 import ProjectEditForm from './ProjectEditForm';
 import ProjectForm from './ProjectForm';
 import ProjectDetail from './ProjectDetail';
+import { Switch, Route, useHistory, useLocation } from 'react-router-dom/cjs/react-router-dom';
 
 const ProjectsContainer = () => {
   const [projects, setProjects] = useState([]);
   const [projectToEdit, setProjectToEdit] = useState(null);
   const [selectedPhase, setSelectedPhase] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [ project, setProject ] = useState( null )
+  const history = useHistory()
+  const location = useLocation()
 
   useEffect(() => {
     let url;
@@ -25,6 +29,8 @@ const ProjectsContainer = () => {
       .then((resp) => resp.json())
       .then((projects) => setProjects(projects));
   }, [selectedPhase, searchQuery]);
+
+  console.log( location, projectToEdit )
 
   const onSelectedPhaseChange = (newPhase) => {
     setSelectedPhase(newPhase)
@@ -56,7 +62,23 @@ const ProjectsContainer = () => {
   const onEditProject = (projectToEdit) => {
     setProjectToEdit(projectToEdit);
   };
+
+  const seeProjectDetails = project => setProject( project )
   
+
+  const projectFormUrl = projectToEdit ? `/projects/edit/${ projectToEdit.id }` : '/projects/new'
+
+  if ( projectToEdit && !location.pathname.includes( 'projects/edit' ) )
+    setProjectToEdit( null )
+  else if ( location.pathname.includes( 'projects/edit/' ) ) {
+    let id = parseInt( location.pathname.split( '/' ).slice( -1 )[0] )
+    let project = projects.find( project => project.id === id )
+    if ( project && ( !projectToEdit || project.id !== projectToEdit.id ) )
+      setProjectToEdit( project )
+    if ( !project )
+      history.push( '/projects' )
+  }
+
   const renderForm = () => {
     if (projectToEdit) {
       return (
@@ -70,24 +92,37 @@ const ProjectsContainer = () => {
     }
   };
 
+  const projectDetailUrl = project ? `/projects/${ encodeURI( project.name ) }` : null
 
   return (
     <>
-      {renderForm()}
-      <ProjectList
-        projects={projects}
-        onEditProject={onEditProject}
-        onUpdateProject={onUpdateProject}
-        onDeleteProject={onDeleteProject}
-        onSelectedPhaseChange={onSelectedPhaseChange}
-        setSelectedPhase={setSelectedPhase}
-        setSearchQuery={setSearchQuery}
-      />
-      <ProjectDetail
-        onEditProject={onEditProject}
-        onUpdateProject={onUpdateProject}
-        onDeleteProject={onDeleteProject}
-      />
+      <Switch>
+        <Route path = { projectFormUrl }  >
+          { renderForm() }
+        </Route>
+
+          <ProjectList
+            projects={projects}
+            onEditProject={onEditProject}
+            onUpdateProject={onUpdateProject}
+            onDeleteProject={onDeleteProject}
+            onSelectedPhaseChange={onSelectedPhaseChange}
+            setSelectedPhase={setSelectedPhase}
+            setSearchQuery={setSearchQuery}
+            seeProjectDetails = { seeProjectDetails }
+          />
+
+        <Route path={ projectDetailUrl }>
+          <ProjectDetail
+            project = { project }
+            onEditProject={onEditProject}
+            onUpdateProject={onUpdateProject}
+            onDeleteProject={onDeleteProject}
+            seeProjectDetails = { seeProjectDetails }
+          />
+        </Route>
+
+      </Switch>
     </>
   )
 }

@@ -4,17 +4,18 @@ import { FaPencilAlt, FaTrash } from "react-icons/fa";
 function ProjectDetail({
   onEditProject,
   onUpdateProject,
-  onDeleteProject
+  onDeleteProject,
+  project,
+  seeProjectDetails
 }) {
-  const [project, setProject] = useState(null);
-
-  const id = 1;
+  
+  const { id } = project
 
   useEffect(() => {
     fetch(`http://localhost:4000/projects/${id}`)
       .then((r) => r.json())
       .then((project) => {
-        setProject(project);
+        seeProjectDetails(project);
       });
   }, [id]);
 
@@ -34,7 +35,7 @@ function ProjectDetail({
       .then(response => response.json())
       .then(updatedProject => {
         onUpdateProject(updatedProject);
-        setProject(updatedProject);
+        seeProjectDetails(updatedProject);
       });
   };
 
