@@ -4,11 +4,12 @@ import { FaPencilAlt, FaTrash } from "react-icons/fa";
 function ProjectDetail({
   onEditProject,
   onUpdateProject,
-  onDeleteProject
+  onDeleteProject,
+  viewProjectDetails
 }) {
   const [project, setProject] = useState(null);
 
-  const id = 1;
+  const id = viewProjectDetails ? viewProjectDetails.id : 1
 
   useEffect(() => {
     fetch(`http://localhost:4000/projects/${id}`)

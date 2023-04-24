@@ -1,4 +1,5 @@
 import { FaPencilAlt, FaTrash } from "react-icons/fa";
+import { useHistory, Link } from "react-router-dom/cjs/react-router-dom";
 
 function ProjectCard({
   project,
@@ -7,6 +8,7 @@ function ProjectCard({
   onDeleteProject,
 }) {
   const { id, image, about, name, link, phase, claps } = project;
+  const history = useHistory()
 
   const handleClap = () => {
     const newClapCount = claps + 1;
@@ -23,6 +25,7 @@ function ProjectCard({
 
   const handleEditClick = () => {
     onEditProject(project);
+    history.push( '/projects/edit/' + id )
   };
 
   const handleDeleteClick = () => {
@@ -37,7 +40,9 @@ function ProjectCard({
   return (
     <li className="card">
       <figure className="image">
-        <img src={image} alt={name} />
+        <Link to = { `/projects/details/` + id }>
+          <img src={image} alt={name} />
+        </Link>
         <button onClick={handleClap} className="claps">
           👏{claps}
         </button>
